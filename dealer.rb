@@ -88,7 +88,7 @@ class Dealer
     if !@dealer_lost
       puts "Dealer stands.\n\n"
       @dealer_score = score
-      find_winner
+      display_winner
     else
       puts "Dealer bust! Player wins!"
     end
