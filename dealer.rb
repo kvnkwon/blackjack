@@ -9,7 +9,7 @@ class Dealer
   SCORE = {
            '2' => 2, '3' => 3, '4' => 4, '5' => 5, 
            '6' => 6, '7' => 7, '8' => 8, '9' => 9,
-           '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10, 'A' => 11
+           '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10
           }
   PLAYER = "Player"
   DEALER = "Dealer"
@@ -40,10 +40,22 @@ class Dealer
 
   def score(hand, who)
     value = 0
+    aces = 0
     hand.each do |card|
       #tells card to start at index 0, minus the amount of characters to ignore, so that it takes off
       #the suits and only keeps the value.
-      value += SCORE[card[0,card.length - 1]]
+      if card[0,card.length - 1] != 'A'
+        value += SCORE[card[0,card.length - 1]]
+      else
+        aces += 1
+      end
+    end
+    aces.times do
+      if value + 11 + (aces - 1) <= 21
+        value += 11
+      else
+        value += 1
+      end
     end
     puts "#{who} score: #{value}"
     value
@@ -59,7 +71,7 @@ class Dealer
   end
 
   def bust?(score, who)
-    return false if score < 21
+    return false if score <= 21
     @player_lost = true if who == PLAYER
     @dealer_lost = true if who == DEALER
     true
@@ -75,7 +87,7 @@ class Dealer
     end
     if !@dealer_lost
       puts "Dealer stands."
-      @dealer_score = scores
+      @dealer_score = score
       find_winner
     else
       puts "Dealer bust! Player wins!"
@@ -104,6 +116,6 @@ class Dealer
       dealer_play
     else
       puts "Bust! You lose!"
+    end
   end
-
 end
