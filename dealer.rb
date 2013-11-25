@@ -42,10 +42,9 @@ class Dealer
     value = 0
     aces = 0
     hand.each do |card|
-      #tells card to start at index 0, minus the amount of characters to ignore, so that it takes off
-      #the suits and only keeps the value.
+      card = card.chop
       if card[0,card.length - 1] != 'A'
-        value += SCORE[card[0,card.length - 1]]
+        value += SCORE[card]
       else
         aces += 1
       end
