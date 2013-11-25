@@ -6,9 +6,15 @@ class Dealer
 
   SUITS = ['♠', '♣', '♥', '♦']
   VALUES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+  SCORE = {
+           '2' => 2, '3' => 3, '4' => 4, '5' => 5, 
+           '6' => 6, '7' => 7, '8' => 8, '9' => 9,
+           '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10, 'A' => 11
+          }
 
   def initialize
     @deck = build_deck
+    @player_lost = false
   end
 
   def build_deck
@@ -19,21 +25,37 @@ class Dealer
       end
     end
     deck.shuffle
-    player_issued(deck)
   end
 
-  def deal_hand(who)
-    first = @deck.pop
-    puts "#{who} was dealt: #{first}"
-    second = @deck.pop
-    puts "#{who} was dealt: #{second}"
-    [] << first << second
+  def deal(who)
+    card = @deck.pop
+    puts "#{who} was dealt: #{card}"
+    card
   end
 
-  def score(hand)
+  def score(hand, who)
+    value = 0
+    hand.each do |card|
+      #tells card to start at index 0, minus the amount of characters to ignore, so that it takes off
+      #the suits and only keeps the value.
+      value += SCORE[card[0,card.length - 1]]
+    end
+    puts "#{who} score: #{value}"
+    value
   end
 
-  def hit_or_stand
+  def stand?
+    print "Hit or stand (H/S): "
+    hit_or_stand = gets.chomp
+    return true if hit_or_stand.downcase == 's'
+    return false if hit_or_stand.downcase == 'h'
+    puts "Invalid input. Please put H or S."
+    stand?
+  end
+
+  def bust?(score)
+    return true if score > 21
+    false
   end
 
   def dealer_play
@@ -41,7 +63,11 @@ class Dealer
 
   def start_game
     puts "Welcome to Blackjack!\n\n"
-    player_hand = deal_hand("Player")
+    player_hand = []
+    player_hand << deal("Player") << deal("Player")
+    score = score(player_hand, "Player")
+    while !bust?(score) && !stand?
+    end
   end
 
 end
