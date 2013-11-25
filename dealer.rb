@@ -54,20 +54,27 @@ class Dealer
   end
 
   def bust?(score)
-    return true if score > 21
-    false
+    return false if score < 21
+    @player_lost = true
+    true
   end
 
   def dealer_play
   end
 
-  def start_game
+  def play_game
     puts "Welcome to Blackjack!\n\n"
     player_hand = []
     player_hand << deal("Player") << deal("Player")
     score = score(player_hand, "Player")
     while !bust?(score) && !stand?
+      player_hand << deal("Player")
+      score = score(player_hand, "Player")
     end
+    if !@player_lost
+      dealer_play
+    else
+      puts "Bust! You lose!"
   end
 
 end
