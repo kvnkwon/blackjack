@@ -94,7 +94,7 @@ class Dealer
     end
   end
 
-  def find_winner
+  def display_winner
     if @player_score > @dealer_score
       puts "You win!"
     else
