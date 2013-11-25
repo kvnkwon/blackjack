@@ -9,7 +9,7 @@ class Dealer
   SCORE = {
            '2' => 2, '3' => 3, '4' => 4, '5' => 5, 
            '6' => 6, '7' => 7, '8' => 8, '9' => 9,
-           '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10
+           '10' => 10, 'J' => 10, 'Q' => 10, 'K' => 10, 'A' => 11
           }
   PLAYER = "Player"
   DEALER = "Dealer"
@@ -42,16 +42,17 @@ class Dealer
     value = 0
     aces = 0
     hand.each do |card|
+      #.chop takes the last character out leaving only the card value.
       card = card.chop
-      if card[0,card.length - 1] != 'A'
+      if card != 'A'
         value += SCORE[card]
       else
         aces += 1
       end
     end
     aces.times do
-      if value + 11 + (aces - 1) <= 21
-        value += 11
+      if value + SCORE['A'] + (aces - 1) <= 21
+        value += SCORE['A']
       else
         value += 1
       end
@@ -65,7 +66,7 @@ class Dealer
     hit_or_stand = gets.chomp
     return true if hit_or_stand.downcase == 's'
     return false if hit_or_stand.downcase == 'h'
-    puts "Invalid input. Please put H or S."
+    puts "Invalid input. Please put H or S.\n"
     stand?
   end
 
@@ -85,7 +86,7 @@ class Dealer
       score = score(dealer_hand, DEALER)
     end
     if !@dealer_lost
-      puts "Dealer stands."
+      puts "Dealer stands.\n\n"
       @dealer_score = score
       find_winner
     else
